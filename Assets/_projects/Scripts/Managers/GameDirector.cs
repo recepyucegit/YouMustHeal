@@ -8,6 +8,12 @@ public class GameDirector : MonoBehaviour
     public Player player;
 
 
+    private void Start()
+    {
+        RestartLevel();
+
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
