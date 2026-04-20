@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
             speed = runSpeed;
         }
 
-        print(CheckIfLanded());
+       
 
         if (Input.GetKeyDown(KeyCode.Space) && CheckIfLanded())
         {

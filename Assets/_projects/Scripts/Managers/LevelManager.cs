@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     {
         _currentlevel = Instantiate(levelPrefabs[currentLevelNo -1]);
         _currentlevel.transform.position = Vector3.zero;
+        _currentlevel.StartLevel();
     }
 
     private void DeleteCurrentLevel()
