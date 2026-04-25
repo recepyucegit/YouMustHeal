@@ -14,7 +14,6 @@ public class Enemy : MonoBehaviour
     public void GetHit(int damage)
     {
         _currentHealth -= damage;
-        print(_currentHealth);
         healthBar.SetHealthBar((float)_currentHealth / startHealth);
       if (_currentHealth <=0)
         {
