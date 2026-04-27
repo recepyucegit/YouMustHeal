@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2016412139056374424}
   - component: {fileID: 2792851156594471286}
   - component: {fileID: 3469801490209297775}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6480396653837512845}
   serializedVersion: 5
-  m_Mass: 15
+  m_Mass: 300
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

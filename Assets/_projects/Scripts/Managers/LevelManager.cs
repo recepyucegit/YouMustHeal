@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    public GameDirector gameDirector;
     public List<Level> levelPrefabs;
     public int currentLevelNo;
     private Level _currentlevel;
@@ -17,7 +18,7 @@ public class LevelManager : MonoBehaviour
     {
         _currentlevel = Instantiate(levelPrefabs[currentLevelNo -1]);
         _currentlevel.transform.position = Vector3.zero;
-        _currentlevel.StartLevel();
+        _currentlevel.StartLevel(this );
     }
 
     private void DeleteCurrentLevel()

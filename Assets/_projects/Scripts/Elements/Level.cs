@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    public void StartLevel()
+    private LevelManager  _levelManager;
+    public void StartLevel(LevelManager levelManager)
     {
-        
+        _levelManager = levelManager;
         foreach (var e in GetComponentsInChildren<Enemy>())
         {
-            e.StartEnemy();
+            e.StartEnemy(_levelManager.gameDirector.player);
         }
     }
 

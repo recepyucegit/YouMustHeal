@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   mainCamera: {fileID: 330585545}
-  walkSpeed: 5
+  walkSpeed: 6
   runSpeed: 10
   jumpForce: 2500
   fallSpeedBonus: 15
@@ -772,6 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec7dd9a408e4ae4590b098a86b36e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  gameDirector: {fileID: 1205325112}
   levelPrefabs:
   - {fileID: 6988677851269579022, guid: 2ca0190bf6550b0418472b541aae69ab, type: 3}
   - {fileID: 6988677851269579022, guid: 4ae8044e4c0c8c042a9811bd3e4016ac, type: 3}
