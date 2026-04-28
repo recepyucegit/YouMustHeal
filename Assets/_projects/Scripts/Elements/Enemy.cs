@@ -1,15 +1,21 @@
+using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
     public HealthBar healthBar;
     private Rigidbody _rb;
+    private NavMeshAgent _navMeshAgent;
     private Player _player;
     public int startHealth;
     private int _currentHealth;
     public float speed;
     public float playerWalkTowardsDistance;
+    public float playerAttackDistance;
+    private bool _isAttackInProgress;
     public ActionState actionState;
     public LayerMask playerSeeLayerMask;
     private Vector3 _playerLastSeenPosition;
@@ -19,6 +25,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
     }
     public void StartEnemy(Player player)
     {
@@ -35,7 +42,11 @@ public class Enemy : MonoBehaviour
         }
 
         // Decider Logic
-        if (GetDistanceFromPlayer() < playerWalkTowardsDistance  )
+        if (GetDistanceFromPlayer() < playerAttackDistance)
+        {
+            actionState = ActionState.Attack;
+        }
+         else if (GetDistanceFromPlayer() < playerWalkTowardsDistance && !_isAttackInProgress )
         {
             if (GetIfEnemySeesPlayer())
             {
@@ -47,7 +58,7 @@ public class Enemy : MonoBehaviour
             }
             
         }
-         
+
 
         // Action States
         if (actionState == ActionState.WalkTowardsPlayer)
@@ -58,16 +69,41 @@ public class Enemy : MonoBehaviour
         {
             WalksTowardsPlayerLastSeenPos();
         }
+        else if (actionState == ActionState.Attack)
+        {
+            AttackPlayer();
+        }
         else if (actionState == ActionState.Standing)
         {
             StopEnemy();
 
         }
+        
 
 
     }
 
-    
+    private void AttackPlayer()
+    {
+        if (! _isAttackInProgress)
+        {
+            _isAttackInProgress = true;
+            _navMeshAgent.isStopped = true;
+            StartCoroutine(AttackCoroutline(1));
+        }
+    }
+
+   IEnumerator AttackCoroutline(float delay)
+    {
+        
+        yield return new WaitForSeconds(delay);
+        if (GetDistanceFromPlayer() < playerAttackDistance)
+        {
+            _player.GetHit(1);
+        }
+        
+        _isAttackInProgress = false;
+    }
 
     private bool GetIfEnemySeesPlayer()
     {
@@ -93,16 +129,16 @@ public class Enemy : MonoBehaviour
 
     private void WalksTowardsPlayer()
     {
-        var dir = Vector3.zero;
-        dir = (_player.transform.position - transform.position).normalized; 
-        _rb.linearVelocity = dir * speed;
+        
+        _navMeshAgent.SetDestination(_player.transform.position);
+        _navMeshAgent.isStopped = false;
     }
 
     private void WalksTowardsPlayerLastSeenPos()
     {
-        var dir = Vector3.zero;
-        dir = (_playerLastSeenPosition - transform.position).normalized;
-        _rb.linearVelocity = dir * speed;
+          
+        _navMeshAgent.SetDestination(_playerLastSeenPosition);
+        _navMeshAgent.isStopped = false;
     }
 
     public void GetHit(int damage)
