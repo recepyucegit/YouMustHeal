@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
         gameObject.SetActive(true);
         transform.position = Vector3.zero;
         _currentHealth = startHealth;
+        healthBar.SetHealthBar(1);
     }
 
     public void GetHit(int damage)
