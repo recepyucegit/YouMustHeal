@@ -127,6 +127,7 @@ MonoBehaviour:
   playerWalkTowardsDistance: 10
   playerAttackDistance: 2
   actionState: 0
+  currentAnimationState: 0
   playerSeeLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -410,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2356958653308694819, guid: ef26b2dc882f2d741b1e5521ca67f8ef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.04
       objectReference: {fileID: 0}
     - target: {fileID: 2356958653308694819, guid: ef26b2dc882f2d741b1e5521ca67f8ef, type: 3}
       propertyPath: m_LocalPosition.z
