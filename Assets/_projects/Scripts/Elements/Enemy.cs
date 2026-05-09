@@ -95,8 +95,10 @@ public class Enemy : MonoBehaviour
         {
             _isAttackInProgress = true;
             _navMeshAgent.isStopped = true;
-            StartCoroutine(AttackCoroutline(1));
+            SwitchAnimation(AnimationState.Attack ,true);
+            StartCoroutine(AttackCoroutline(1.2f));
         }
+        
     }
 
    IEnumerator AttackCoroutline(float delay)
@@ -129,24 +131,24 @@ public class Enemy : MonoBehaviour
         SwitchAnimation(AnimationState.Idle);
     }
 
-    private void SwitchAnimation(AnimationState desiredAnimationState)
+    private void SwitchAnimation(AnimationState desiredAnimationState, bool forcePlayAnimation = false)
     {
-        if (desiredAnimationState == AnimationState.Walk && currentAnimationState != AnimationState.Walk)
+        if (desiredAnimationState == AnimationState.Walk && (currentAnimationState != AnimationState.Walk || forcePlayAnimation))
         {
             _animator.SetTrigger("Walk");
             currentAnimationState = AnimationState.Walk;
         }
-        else if (desiredAnimationState == AnimationState.Idle && currentAnimationState != AnimationState.Idle)
+        else if (desiredAnimationState == AnimationState.Idle && (currentAnimationState != AnimationState.Idle || forcePlayAnimation))
         {
             _animator.SetTrigger("Idle");
             currentAnimationState = AnimationState.Idle;
         }
-        else if (desiredAnimationState == AnimationState.Attack && currentAnimationState != AnimationState.Attack)
+        else if (desiredAnimationState == AnimationState.Attack && (currentAnimationState != AnimationState.Attack || forcePlayAnimation))
         {
             _animator.SetTrigger("Attack");
             currentAnimationState = AnimationState.Attack;
         }
-        else if (desiredAnimationState == AnimationState.Die && currentAnimationState != AnimationState.Die)
+        else if (desiredAnimationState == AnimationState.Die && (currentAnimationState != AnimationState.Die || forcePlayAnimation))
         {
             _animator.SetTrigger("Die");
             currentAnimationState = AnimationState.Die;
