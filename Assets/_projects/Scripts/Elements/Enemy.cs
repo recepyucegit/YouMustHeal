@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent _navMeshAgent;
     private Player _player;
     private Animator _animator;
+    private CapsuleCollider _calpsuleCollider;
 
     public int startHealth;
     private int _currentHealth;
@@ -21,6 +22,7 @@ public class Enemy : MonoBehaviour
 
     public ActionState actionState;
     public AnimationState currentAnimationState;
+    private AnimationState _animationStateBeforeGetHit;
 
     public LayerMask playerSeeLayerMask;
     private Vector3 _playerLastSeenPosition;
@@ -32,6 +34,7 @@ public class Enemy : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponentInChildren<Animator>();
+        _calpsuleCollider = GetComponent<CapsuleCollider>();
     }
     public void StartEnemy(Player player)
     {
@@ -148,6 +151,11 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("Attack");
             currentAnimationState = AnimationState.Attack;
         }
+        else if (desiredAnimationState == AnimationState.GetHit && (currentAnimationState != AnimationState.GetHit || forcePlayAnimation))
+        {
+            _animator.SetTrigger("GetHit");
+            currentAnimationState = AnimationState.GetHit;
+        }
         else if (desiredAnimationState == AnimationState.Die && (currentAnimationState != AnimationState.Die || forcePlayAnimation))
         {
             _animator.SetTrigger("Die");
@@ -162,34 +170,58 @@ public class Enemy : MonoBehaviour
 
     private void WalksTowardsPlayer()
     {
+        if (currentAnimationState != AnimationState.GetHit)
+        {
+            _navMeshAgent.SetDestination(_player.transform.position);
+            _navMeshAgent.isStopped = false;
+            SwitchAnimation(AnimationState.Walk);
+
+        }
         
-        _navMeshAgent.SetDestination(_player.transform.position);
-        _navMeshAgent.isStopped = false;
-        SwitchAnimation(AnimationState.Walk);
         
     }
 
     private void WalksTowardsPlayerLastSeenPos()
     {
-          
-        _navMeshAgent.SetDestination(_playerLastSeenPosition);
-        _navMeshAgent.isStopped = false;
-        SwitchAnimation(AnimationState.Walk);
+        if (currentAnimationState != AnimationState.GetHit)
+        {
+            _navMeshAgent.SetDestination(_playerLastSeenPosition);
+            _navMeshAgent.isStopped = false;
+            SwitchAnimation(AnimationState.Walk);
+        }
     }
 
     public void GetHit(int damage)
     {
         _currentHealth -= damage;
+        StartCoroutine(PlayGetHitCoroutine());
         healthBar.SetHealthBar((float)_currentHealth / startHealth);
       if (_currentHealth <=0)
         {
             Die();
         }
     }
+    IEnumerator PlayGetHitCoroutine()
+    {
+        if (currentAnimationState != AnimationState.GetHit)
+        {
+            _animationStateBeforeGetHit = currentAnimationState;
+        }
+        
+        _navMeshAgent.isStopped = true;
+        SwitchAnimation(AnimationState.GetHit);
+        yield return new WaitForSeconds(.1f);
+        SwitchAnimation(_animationStateBeforeGetHit);
+    }
 
     private void Die()
     {
-        Destroy(gameObject);
+        actionState = ActionState.Dead;
+        _animationStateBeforeGetHit = AnimationState.Die;
+        _navMeshAgent.isStopped = true;
+        _calpsuleCollider.enabled = false; 
+        SwitchAnimation(AnimationState.Die);
+        Destroy(gameObject, 3);
     }
 }
 
@@ -206,5 +238,6 @@ public enum AnimationState
     Idle,
     Walk,
     Attack,
+    GetHit,
     Die,
 }
