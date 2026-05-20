@@ -122,9 +122,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   healthBar: {fileID: 4172803655651920021}
+  eyeLights:
+  - {fileID: 6981515035938284991}
+  - {fileID: 8295523968054564903}
   startHealth: 10
   speed: 3
-  playerWalkTowardsDistance: 10
+  playerWalkTowardsDistance: 20
   playerAttackDistance: 2
   actionState: 0
   currentAnimationState: 0

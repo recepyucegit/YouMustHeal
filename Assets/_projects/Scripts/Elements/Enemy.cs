@@ -1,6 +1,8 @@
 using DG.Tweening;
+using NUnit.Framework;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,6 +14,8 @@ public class Enemy : MonoBehaviour
     private Player _player;
     private Animator _animator;
     private CapsuleCollider _calpsuleCollider;
+    public List<Light> eyeLights;
+    private Coroutine _attackCoroutine;
 
     public int startHealth;
     private int _currentHealth;
@@ -99,7 +103,7 @@ public class Enemy : MonoBehaviour
             _isAttackInProgress = true;
             _navMeshAgent.isStopped = true;
             SwitchAnimation(AnimationState.Attack ,true);
-            StartCoroutine(AttackCoroutline(1.2f));
+            _attackCoroutine=StartCoroutine(AttackCoroutline(1.2f));
         }
         
     }
@@ -114,6 +118,13 @@ public class Enemy : MonoBehaviour
         }
         
         _isAttackInProgress = false;
+    }
+   IEnumerator UpperBodyMaskCoroutine(float delay, float amount)
+    {
+        _animator.SetLayerWeight(1, amount);
+        yield return new WaitForSeconds(delay);
+        _animator.SetLayerWeight(1, 0);
+        
     }
 
     private bool GetIfEnemySeesPlayer()
@@ -138,7 +149,8 @@ public class Enemy : MonoBehaviour
     {
         if (desiredAnimationState == AnimationState.Walk && (currentAnimationState != AnimationState.Walk || forcePlayAnimation))
         {
-            _animator.SetTrigger("Walk");
+            //_animator.SetTrigger("Walk");
+            _animator.CrossFade("Walk", .1f);
             currentAnimationState = AnimationState.Walk;
         }
         else if (desiredAnimationState == AnimationState.Idle && (currentAnimationState != AnimationState.Idle || forcePlayAnimation))
@@ -155,10 +167,12 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetTrigger("GetHit");
             currentAnimationState = AnimationState.GetHit;
+            StartCoroutine(UpperBodyMaskCoroutine(.3f, .5f));
         }
         else if (desiredAnimationState == AnimationState.Die && (currentAnimationState != AnimationState.Die || forcePlayAnimation))
         {
-            _animator.SetTrigger("Die");
+            // _animator.SetTrigger("Die");
+            _animator.CrossFade("Die", .1f);
             currentAnimationState = AnimationState.Die;
         }
     }
@@ -203,6 +217,10 @@ public class Enemy : MonoBehaviour
     }
     IEnumerator PlayGetHitCoroutine()
     {
+        if (_attackCoroutine != null)
+        {
+            StopCoroutine(_attackCoroutine);
+        }
         if (currentAnimationState != AnimationState.GetHit)
         {
             _animationStateBeforeGetHit = currentAnimationState;
@@ -216,12 +234,27 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        CancelAttack();
         actionState = ActionState.Dead;
         _animationStateBeforeGetHit = AnimationState.Die;
         _navMeshAgent.isStopped = true;
-        _calpsuleCollider.enabled = false; 
+        _calpsuleCollider.enabled = false;
         SwitchAnimation(AnimationState.Die);
+        foreach (var e in eyeLights)
+        {
+            e.enabled = false;
+        }
         Destroy(gameObject, 3);
+    }
+
+    private void CancelAttack()
+    {
+        _isAttackInProgress = false;
+
+        if (_attackCoroutine != null)
+        {
+            StopCoroutine(_attackCoroutine);
+        }
     }
 }
 
