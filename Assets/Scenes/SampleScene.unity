@@ -463,11 +463,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963e302bd49a72d429ef9a00b79a212c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  mainCamera: {fileID: 330585545}
   walkSpeed: 6
   runSpeed: 10
   jumpForce: 2500
   fallSpeedBonus: 15
+  isDead: 0
+  mainCamera: {fileID: 330585545}
   jumpLayers:
     serializedVersion: 2
     m_Bits: 8
@@ -487,6 +488,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   startHealth: 10
+  isDead: 0
+  gameDirector: {fileID: 1205325112}
   healthBar: {fileID: 1201321699}
 --- !u!4 &641990607
 Transform:

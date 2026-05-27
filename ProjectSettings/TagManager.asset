@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wall
   - Enemy
+  - Potion
   layers:
   - Default
   - TransparentFX

@@ -10,21 +10,30 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float fallSpeedBonus;
     private bool _isJumping;
+    public bool isDead;
+    
 
     private Rigidbody _rb;
     private Animator _animator;
     public Camera mainCamera;
+    private Player _player;
 
     public LayerMask jumpLayers;
     public LayerMask lookLayers;
 
     private void Awake()
     {
+        _player = GetComponent<Player>();
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
+        
     }
     private void Update()
     {
+        if (_player.isDead)
+        {
+            return;
+        }
         var direction = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
         {
@@ -114,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
             yVelocity.y -= fallSpeedBonus * Time.deltaTime; 
         }
 
-        if (!_isJumping)
+        if (!_isJumping && !_player.didWin)
         {
             if (dir.magnitude > 0)
             {
@@ -130,11 +139,13 @@ public class PlayerMovement : MonoBehaviour
         _rb.linearVelocity = dir.normalized * speed + yVelocity;
     }
 
-    void ChangeAnimationState(string key)
+   public void ChangeAnimationState(string key)
     {
         _animator.SetBool("Idle", false);
         _animator.SetBool("Run", false);
         _animator.SetBool("Jump", false);
+        _animator.SetBool("Die", false);
+        _animator.SetBool("Win", false);
         _animator.SetBool(key, true);
     }
 }

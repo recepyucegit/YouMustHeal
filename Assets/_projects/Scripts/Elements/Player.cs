@@ -5,8 +5,17 @@ public class Player : MonoBehaviour
 {
     public int startHealth;
     private int _currentHealth;
-    public HealthBar healthBar;
+    public bool isDead;
+    public bool didWin;
 
+    public GameDirector gameDirector;
+    public HealthBar healthBar;
+    private PlayerMovement _playerMovement;
+
+    private void Awake()
+    {
+        _playerMovement = GetComponent<PlayerMovement>();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.H))
@@ -14,16 +23,35 @@ public class Player : MonoBehaviour
             GetHit(1);
         }
     }
+
+
     public void RestartPlayer()
     {
-        gameObject.SetActive(true);
+        
         transform.position = Vector3.zero;
         _currentHealth = startHealth;
         healthBar.SetHealthBar(1);
+        _playerMovement.ChangeAnimationState("Idle");
+        isDead = false;
+        didWin = false;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Potion"))
+        {
+            other.gameObject.SetActive(false);
+            _playerMovement.ChangeAnimationState("Win");
+            gameDirector.LevelCompleted();
+            didWin = true;
+        }
+    }
     public void GetHit(int damage)
     {
+        if (isDead)
+        {
+            return;
+        }
         _currentHealth -= damage;
         healthBar.SetHealthBar((float)_currentHealth / startHealth);
         if (_currentHealth <=0)
@@ -34,6 +62,9 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        gameObject.SetActive(false);
+        isDead = true;
+        _playerMovement.ChangeAnimationState("Die");
+        gameDirector.PlayerDied();
+
     }
 }

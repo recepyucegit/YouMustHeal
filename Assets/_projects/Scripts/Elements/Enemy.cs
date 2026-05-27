@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     public float playerWalkTowardsDistance;
     public float playerAttackDistance;
     private bool _isAttackInProgress;
+    private bool _isPlayerDead;
 
     public ActionState actionState;
     public AnimationState currentAnimationState;
@@ -49,7 +50,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (actionState == ActionState.Dead)
+        if (actionState == ActionState.Dead || _isPlayerDead)
         {
             return;
         }
@@ -86,11 +87,7 @@ public class Enemy : MonoBehaviour
         {
             AttackPlayer();
         }
-        else if (actionState == ActionState.Standing)
-        {
-            StopEnemy();
-
-        }
+        
         
 
 
@@ -139,9 +136,14 @@ public class Enemy : MonoBehaviour
         return true;
     }
 
-    private void StopEnemy()
+    public void SetPlayerDead()
     {
-        _rb.linearVelocity = Vector3.zero;
+        if (_attackCoroutine != null)
+        {
+            StopCoroutine(_attackCoroutine);
+        }
+        _isPlayerDead = true;
+        _navMeshAgent.isStopped = true;
         SwitchAnimation(AnimationState.Idle);
     }
 
