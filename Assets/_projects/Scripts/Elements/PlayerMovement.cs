@@ -1,20 +1,27 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Camera mainCamera;
+    
     public float walkSpeed;
     public float runSpeed;
     public float jumpForce;
     public float fallSpeedBonus;
+    private bool _isJumping;
+
     private Rigidbody _rb;
+    private Animator _animator;
+    public Camera mainCamera;
+
     public LayerMask jumpLayers;
     public LayerMask lookLayers;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
     }
     private void Update()
     {
@@ -43,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
             speed = runSpeed;
         }
 
-       
+        _isJumping = !CheckIfLanded();
 
         if (Input.GetKeyDown(KeyCode.Space) && CheckIfLanded())
         {
@@ -54,7 +61,16 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer(direction, speed);
 
         LookAtMouse();
+
+        var angle = Vector3.SignedAngle(transform.forward, direction, Vector3.up);
+        SetWalkDirection(angle);
     }
+    void SetWalkDirection(float angle)
+    {
+        _animator.SetFloat("WalkDirection", angle);
+    }
+
+
 
     private void LookAtMouse()
     {
@@ -83,6 +99,8 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         _rb.AddForce(Vector3.up * jumpForce);
+        _isJumping = true;
+        ChangeAnimationState("Jump");
     }
 
     void MovePlayer(Vector3 dir, float speed)
@@ -90,10 +108,33 @@ public class PlayerMovement : MonoBehaviour
         var yVelocity = _rb.linearVelocity;
         yVelocity.x = 0;
         yVelocity.z = 0;
+
         if (yVelocity.y <0)
         {
             yVelocity.y -= fallSpeedBonus * Time.deltaTime; 
         }
+
+        if (!_isJumping)
+        {
+            if (dir.magnitude > 0)
+            {
+                ChangeAnimationState("Run");
+            }
+            else
+            {
+                ChangeAnimationState("Idle");
+            }
+        }
+       
+
         _rb.linearVelocity = dir.normalized * speed + yVelocity;
+    }
+
+    void ChangeAnimationState(string key)
+    {
+        _animator.SetBool("Idle", false);
+        _animator.SetBool("Run", false);
+        _animator.SetBool("Jump", false);
+        _animator.SetBool(key, true);
     }
 }

@@ -228,7 +228,7 @@ public class Enemy : MonoBehaviour
         
         _navMeshAgent.isStopped = true;
         SwitchAnimation(AnimationState.GetHit);
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.3f);
         SwitchAnimation(_animationStateBeforeGetHit);
     }
 
