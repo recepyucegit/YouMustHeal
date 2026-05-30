@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     public int startHealth;
     private int _currentHealth;
     public bool isDead;
-    public bool didWin;
+    
 
     public GameDirector gameDirector;
     public HealthBar healthBar;
@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
         healthBar.SetHealthBar(1);
         _playerMovement.ChangeAnimationState("Idle");
         isDead = false;
-        didWin = false;
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
             other.gameObject.SetActive(false);
             _playerMovement.ChangeAnimationState("Win");
             gameDirector.LevelCompleted();
-            didWin = true;
+            
         }
     }
     public void GetHit(int damage)
