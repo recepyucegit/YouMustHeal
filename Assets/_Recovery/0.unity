@@ -575,6 +575,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1806283849}
     m_Modifications:
+    - target: {fileID: 230850203787753998, guid: 2037175470479b94abc39ea2ca615c91, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 230850203787753998, guid: 2037175470479b94abc39ea2ca615c91, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 230850203787753998, guid: 2037175470479b94abc39ea2ca615c91, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 3162040784729293467, guid: 2037175470479b94abc39ea2ca615c91, type: 3}
       propertyPath: m_Name
       value: MachineGun

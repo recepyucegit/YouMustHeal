@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public GameDirector gameDirector;
     public HealthBar healthBar;
     private PlayerMovement _playerMovement;
+    public GameObject shadow;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
         {
             GetHit(1);
         }
+        shadow.transform.position = new Vector3(transform.position.x, .01f, transform.position.z);
     }
 
 
@@ -65,6 +67,11 @@ public class Player : MonoBehaviour
         isDead = true;
         _playerMovement.ChangeAnimationState("Die");
         gameDirector.PlayerDied();
+        DisableShadow();
+    }
 
+    void DisableShadow()
+    {
+        shadow.SetActive(false);
     }
 }

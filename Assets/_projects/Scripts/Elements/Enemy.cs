@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     private CapsuleCollider _calpsuleCollider;
     public List<Light> eyeLights;
     private Coroutine _attackCoroutine;
+    public GameObject shadow;
+    public Light mainLight;
 
     public int startHealth;
     private int _currentHealth;
@@ -246,6 +248,8 @@ public class Enemy : MonoBehaviour
         {
             e.enabled = false;
         }
+        shadow.SetActive(false);
+        mainLight.enabled = false;
         Destroy(gameObject, 3);
     }
 

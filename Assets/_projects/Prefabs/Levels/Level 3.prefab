@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6988677851269579022}
   - component: {fileID: 1647075550051279286}
   m_Layer: 0
-  m_Name: Level 1
+  m_Name: Level 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 660dfa3bb91aaa54bb32633fc4b5368b, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 109dc2c56d1836b41a43d64374b55ab9, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1001 &2366532752235321431
 PrefabInstance:
@@ -162,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5590007667660184352, guid: 35ead83fa727b704bb6ff21ef72ee411, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5590007667660184352, guid: 35ead83fa727b704bb6ff21ef72ee411, type: 3}
       propertyPath: m_LocalPosition.z

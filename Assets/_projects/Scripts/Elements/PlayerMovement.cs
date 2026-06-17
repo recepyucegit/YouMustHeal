@@ -91,13 +91,17 @@ public class PlayerMovement : MonoBehaviour
         {
             var lookPos = hit.point;
             lookPos.y = transform.position.y;
-            transform.LookAt(hit.point);
+            transform.LookAt(lookPos);
         }
 
     }
 
     private bool CheckIfLanded()
     {
+        if (Physics.Raycast(transform.position + Vector3.up * .1f, Vector3.down, out RaycastHit hit, 2f, jumpLayers))
+        {
+            _player.shadow.transform.position = hit.point + Vector3.up * .01f;
+        }
         if (Physics.Raycast(transform.position + Vector3.up * .1f, Vector3.down, .3f,jumpLayers))
         {
             return true;
